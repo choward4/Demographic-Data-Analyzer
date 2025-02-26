@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 def calculate_demographic_data(print_data=True):
@@ -10,14 +11,14 @@ def calculate_demographic_data(print_data=True):
     race_count = df['race'].value_counts()
 
     # What is the average age of men?
-    average_age_men = df['age'][df['sex'] == "Male"].values.mean()
+    average_age_men = np.round(df['age'][df['sex'] == "Male"].values.mean(), 1)
 
     # What is the percentage of people who have a Bachelor's degree?
     edu = df['education']
     total = edu.count()
     bachelors = edu[edu == 'Bachelors'].count()
 
-    percentage_bachelors = (bachelors / total) * 100
+    percentage_bachelors = np.round((bachelors / total) * 100, 1)
 
     # What percentage of people with advanced education (`Bachelors`, `Masters`, or `Doctorate`) make more than 50K?
     # What percentage of people without advanced education make more than 50K?
@@ -31,8 +32,8 @@ def calculate_demographic_data(print_data=True):
     over_50K = df['salary'] == '>50K'
 
     # percentage with salary >50K
-    higher_education_rich = edu[advanced_arr & over_50K].count() / higher_education * 100
-    lower_education_rich = edu[~advanced_arr & over_50K].count() / lower_education * 100
+    higher_education_rich = np.round(edu[advanced_arr & over_50K].count() / higher_education * 100, 1)
+    lower_education_rich = np.round(edu[~advanced_arr & over_50K].count() / lower_education * 100, 1)
 
     # What is the minimum number of hours a person works per week (hours-per-week feature)?
     min_work_hours = df['hours-per-week'].min()
@@ -41,7 +42,7 @@ def calculate_demographic_data(print_data=True):
     hours = df['hours-per-week']
 
     minimum = hours.min()
-    num_min_workers = hours.value_counts()[minimum]
+    num_min_workers = np.round(hours.value_counts()[minimum], 1)
 
     rich_percentage = ((hours == minimum) & over_50K).sum() / num_min_workers * 100
 
@@ -52,7 +53,7 @@ def calculate_demographic_data(print_data=True):
     for country in df['native-country'].value_counts().index:
         country_arr = df['native-country'] == country
         total_pop = country_arr.sum()
-        percentage = (country_arr & over_50K).sum() / total_pop * 100
+        percentage = np.round((country_arr & over_50K).sum() / total_pop * 100, 1)
         
         # Update with the highest percentage if the current percentage is higher
         if percentage > highest_earning_country_percentage:
