@@ -10,7 +10,7 @@ def calculate_demographic_data(print_data=True):
     race_count = df['race'].value_counts()
 
     # What is the average age of men?
-    average_age_men = df['age'].values.mean()
+    average_age_men = df['age'][df['sex'] == "Male"].values.mean()
 
     # What is the percentage of people who have a Bachelor's degree?
     edu = df['education']
